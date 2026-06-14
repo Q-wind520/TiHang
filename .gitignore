@@ -48,3 +48,6 @@ data/*.json
 !data/*.sample.json
 builder/
 builder_dist/
+builder/
+dist/
+*.spec

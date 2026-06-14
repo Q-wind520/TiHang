@@ -1,8 +1,7 @@
 @echo off
 REM ================================================================
-REM  Nuitka Build Script for 题航 TiHang
+REM  Build Script for 题航 TiHang (using PyInstaller)
 REM  Usage: .\build.bat
-REM  Prerequisites: pip install nuitka (installed in .venv)
 REM ================================================================
 
 cd /d "%~dp0"
@@ -10,26 +9,32 @@ cd /d "%~dp0"
 echo [1/2] Activating virtual environment...
 call .venv\Scripts\activate.bat
 
-echo [2/2] Building TiHang standalone executable...
-echo This may take 10-20 minutes on first build...
+echo [2/2] Building TiHang with PyInstaller...
+echo This may take 2-5 minutes...
 
-python -m nuitka ^
-    --standalone ^
-    --assume-yes-for-downloads ^
-    --enable-plugins=pyside6 ^
-    --windows-console-mode=disable ^
-    --include-data-dir=data=data ^
-    --include-data-dir=assets=assets ^
-    --output-dir=builder ^
-    --output-filename=tihang.exe ^
-    --remove-output ^
+pyinstaller ^
+    --name=tihang ^
+    --windowed ^
+    --onedir ^
+    --add-data="data;data" ^
+    --add-data="assets;assets" ^
+    --hidden-import=PySide6.QtCore ^
+    --hidden-import=PySide6.QtGui ^
+    --hidden-import=PySide6.QtWidgets ^
+    --hidden-import=shiboken6 ^
+    --hidden-import=openai ^
+    --hidden-import=anthropic ^
+    --hidden-import=Pygments ^
+    --hidden-import=PyPDF2 ^
+    --clean ^
+    --noconfirm ^
     run.py
 
 if %ERRORLEVEL% EQU 0 (
     echo.
     echo ==============================================================
     echo   Build successful!
-    echo   Output: builder\run.dist\tihang.exe
+    echo   Output: dist\tihang\tihang.exe
     echo ==============================================================
 ) else (
     echo.

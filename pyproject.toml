@@ -37,7 +37,7 @@ dev = [
     "mypy>=1.0.0",
 ]
 build = [
-    "nuitka>=2.0",
+    "pyinstaller>=6.0",
 ]
 
 [build-system]
